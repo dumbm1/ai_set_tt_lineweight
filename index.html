@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ai-set-tt-lineweight widget</title>
+  <style>
+    .testFont{
+      font-family: 'RaleighSerial';
+      }
+  </style>
+</head>
+<body>
+
+<div id="app" class="testFont">
+  <button @click="getAiVers">{{value}}</button>
+  <button @click="test">{{testBtn}}</button>
+  <button @click="refresh">{{refresh_btn}}</button>
+  <p>{{os()}}</p>
+  <p>{{aiVers}}</p>
+</div>
+
+
+<script src="js/lib/vue.js"></script>
+<script src="js/lib/CSInterface.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

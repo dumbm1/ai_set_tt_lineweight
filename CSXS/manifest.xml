@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionManifest Version="4.0"
+                   ExtensionBundleId="com.ai_set_tt_lineweight"
+                   ExtensionBundleVersion="0.0.1"
+                   ExtensionBundleName="ai_set_tt_lineweight"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Author>
+        <![CDATA[Marat Shagiev]]>
+    </Author>
+    <Contact mailto="m_js@bk.ru">
+        <![CDATA[m_js@bk.ru]]>
+    </Contact>
+    <Legal>
+        <![CDATA[Legal stuff...]]>
+    </Legal>
+    <Abstract href="https://github.com/dumbm1/ai_set_tt_lineweight">
+        <![CDATA[FlexoPrint layout to output]]>
+    </Abstract>
+
+    <ExtensionList>
+        <Extension Id="com.ai_set_tt_lineweight" Version="0.0.1"/>
+    </ExtensionList>
+    <ExecutionEnvironment>
+        <HostList>
+            <Host Name="ILST" Version="17.0"/>
+        </HostList>
+        <LocaleList>
+            <Locale Code="All"/>
+        </LocaleList>
+        <RequiredRuntimeList>
+            <RequiredRuntime Name="CSXS" Version="4.0"/>
+        </RequiredRuntimeList>
+    </ExecutionEnvironment>
+    <DispatchInfoList>
+        <Extension Id="com.ai_set_tt_lineweight">
+            <DispatchInfo>
+                <Resources>
+                    <MainPath>./index.html</MainPath>
+                    <ScriptPath>./jsx/hostscript.jsx</ScriptPath>
+                </Resources>
+                <Lifecycle>
+                    <AutoVisible>true</AutoVisible>
+                </Lifecycle>
+                <UI>
+                    <Type>Panel</Type>
+                    <Menu>ai_set_tt_lineweight 0.0.1</Menu>
+                    <Geometry>
+                        <Size>
+                            <Width>200</Width>
+                            <Height>300</Height>
+                        </Size>
+                        <MinSize>
+                            <Width>190</Width>
+                            <Height>290</Height>
+                        </MinSize>
+                        <MaxSize>
+                            <Width>720</Width>
+                            <Height>1024</Height>
+                        </MaxSize>
+                    </Geometry>
+                    <Icons>
+                        <Icon Type="Normal">./icons/iconLightThemeNormal.png</Icon>
+                        <Icon Type="RollOver">./icons/iconLightThemeHover.png</Icon>
+                        <Icon Type="Disabled">./icons/iconDisabled.png</Icon>
+                        <Icon Type="DarkNormal">./icons/iconDarkThemeNormal.png</Icon>
+                        <Icon Type="DarkRollOver">./icons/iconDarkThemeHover.png</Icon>
+                    </Icons>
+                </UI>
+            </DispatchInfo>
+        </Extension>
+    </DispatchInfoList>
+</ExtensionManifest>
