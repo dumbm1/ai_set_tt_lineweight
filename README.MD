@@ -1,13 +1,13 @@
- set tt lineweight
- ===
-widget to adobe illustrator cc-2020
+Set minimal lineweight of text
+===
+Extension panel for Adobe illustrator cc-2020
 ---
-on vue.js framework
+with vue.js framework
 ---
-
+note: 
 todo:
- 1. Picked symbols with max-verticals lines without rounded elements, ungularly lines ets
- example: `ifhijlmn1tu1 IFHIJLMN1TU` и  `гинптцчшщ1 ГИНПТЦЧШЩ1`
+ 1. Picked symbols with max-verticals lines without rounded elements, ungularly lines ets.
+    * example: `ifhijlmn1tu1 IFHIJLMN1TU гинптцчшщ ГИНПТЦЧШЩ`
  2. Algorithm `getMinWidth()`:
     * doublicate selected textFrame
        * executeMenuCommand('copy', 'deselectall', 'pasteFront)
