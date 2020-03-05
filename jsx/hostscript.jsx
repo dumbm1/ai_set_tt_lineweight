@@ -8,7 +8,10 @@ function ai_test() {
   w.show();
 }
 
-function __intersectSelection() {
+/**
+ * make action that try to intersect selection paths
+ * */
+function _intersectSelection() {
   var actStr = '' +
     '/version 3' +
     '/name [ 19' +
@@ -55,10 +58,10 @@ function __intersectSelection() {
   f.remove();
   app.doScript("Intersect_selection", "Intersect_selection", false); // action name, set name
   app.unloadAction("Intersect_selection", ""); // set name
-};
+}
 
 // todo: add filter by height
-function __getMinWidth(selection) {
+function _getMinWidth(selection) {
   var minWidth = 10000000;
   for (var i = 0; i < selection.length; i++) {
     minWidth = Math.min(selection[i].width, minWidth);
@@ -66,23 +69,43 @@ function __getMinWidth(selection) {
   return minWidth;
 }
 
-function __makeTmplPath(tmplElem) {
-  var txtTemplate, pathTemplate;
-
-  txtTemplate = tmplElem.duplicate();
-  executeMenuCommand('deselectall');
-  pathTemplate = txtTemplate.createOutline();
-  pathTemplate.selected = true;
-  executMenuCommand('compoundPath');
-
+function _filterByHeightDecorator(f, minHeight ) {
+  let sel = selection;
 }
 
 /**
- * Try to get the TextFrame
+ * Make CompoundPath from TextFrame
+ *
+ * @param {Object} textFrame - TextFrame
+ * @param {String} textContents - string to replace textFrame content
+ * @return {Object} pathTemplate - Path
+ * */
+function _makeTmplPath(textFrame, textContents) {
+  var textFrameDuplicate, pathTemplate, len;
+
+  textFrameDuplicate = textFrame.duplicate();
+  len = textFrame.characters.length;
+
+  for (var i = 0; i < len - 1; i++) {
+    textFrameDuplicate.characters[0].remove();
+  }
+
+  if (textContents) textFrameDuplicate.contents = textContents;
+
+  executeMenuCommand('deselectall');
+  pathTemplate = textFrameDuplicate.createOutline();
+  pathTemplate.selected = true;
+  executMenuCommand('compoundPath');
+
+  return pathTemplate;
+}
+
+/**
+ * Try to get the selected TextFrame
  *
  * @return {Object} TextFrameItem
  * */
-function __getTextFrame() { // try to get the TextFrame
+function _getTextFrame() { // try to get the TextFrame
 
   if (!selection[0] && !selection.typename) throw new Error('No selection!'); // no selection
 
