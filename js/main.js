@@ -31,7 +31,7 @@
       },
 
       test: function () {
-        csFace.evalScript('__intersectSelection()', function (res) {});
+        csFace.evalScript('getMinLineWeight()', function (res) {});
       }
     }
   })

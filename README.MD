@@ -7,9 +7,10 @@ with vue.js framework
 note: 
 todo:
  1. Picked symbols with max-verticals lines without rounded elements, ungularly lines ets.
-    * example: `ifhijlmn1tu1 IFHIJLMN1TU гинптцчшщ ГИНПТЦЧШЩ`
+    * example: `fhijlmn1tu1 FHIJLMN1TU гинптцчшщ ГИНПТЦЧШЩ`
  2. Algorithm `getMinWidth()`:
     * doublicate selected textFrame
+       * `getTextFrame()`
        * executeMenuCommand('copy', 'deselectall', 'pasteFront)
        * var `frameTmpl` = selection[0]
     * set content with picked symbols
