@@ -1,4 +1,3 @@
-//CONST
 /**
  * Try to search min lineweight of the seleted textFrame
  * 1. duplicate textFrame
@@ -15,11 +14,16 @@ function getMinLineWeight() {
   tmplHeightElem.remove();
   var tmplPath = _mkTmplPath(textFrame, 'ILJNHTMiljnhtm');
   var rects = _mkRects(tmplPath, rectHeight);
+  var resultArr = _mkTestArray(tmplPath, rects);
 
-  alert(rects);
+  alert(resultArr.length);
 
+  /**
+   * @return {Array} resultArr - array of groups of paths
+   * */
   function _mkTestArray(tmplPath, rects) {
     var tmplPathArr = [];
+    var resultArr = [];
 
     tmplPathArr.push(tmplPath);
 
@@ -33,50 +37,53 @@ function getMinLineWeight() {
       rects[i].selected = true;
       tmplPahtArr[i].selected = true;
       __intersectSelection();
+      resultArr.push(selection[0]);
     }
+
+    return resultArr;
 
     /**
      * make action that try to intersect selection paths
      * */
     function __intersectSelection() {
       var actStr = '' +
-                   '/version 3' +
-                   '/name [ 19' +
-                   '	496e746572736563745f73656c656374696f6e' +
-                   ']' +
-                   '/isOpen 0' +
-                   '/actionCount 1' +
-                   '/action-1 {' +
-                   '	/name [ 19' +
-                   '		496e746572736563745f73656c656374696f6e' +
-                   '	]' +
-                   '	/keyIndex 0' +
-                   '	/colorIndex 7' +
-                   '	/isOpen 1' +
-                   '	/eventCount 1' +
-                   '	/event-1 {' +
-                   '		/useRulersIn1stQuadrant 1' +
-                   '		/internalName (ai_plugin_pathfinder)' +
-                   '		/localizedName [ 10' +
-                   '			5061746866696e646572' +
-                   '		]' +
-                   '		/isOpen 1' +
-                   '		/isOn 1' +
-                   '		/hasDialog 0' +
-                   '		/parameterCount 1' +
-                   '		/parameter-1 {' +
-                   '			/key 1851878757' +
-                   '			/showInPalette 1' +
-                   '			/type (enumerated)' +
-                   '			/name [ 9' +
-                   '				496e74657273656374' +
-                   '			]' +
-                   '			/value 1' +
-                   '		}' +
-                   '	}' +
-                   '}',
+        '/version 3' +
+        '/name [ 19' +
+        '	496e746572736563745f73656c656374696f6e' +
+        ']' +
+        '/isOpen 0' +
+        '/actionCount 1' +
+        '/action-1 {' +
+        '	/name [ 19' +
+        '		496e746572736563745f73656c656374696f6e' +
+        '	]' +
+        '	/keyIndex 0' +
+        '	/colorIndex 7' +
+        '	/isOpen 1' +
+        '	/eventCount 1' +
+        '	/event-1 {' +
+        '		/useRulersIn1stQuadrant 1' +
+        '		/internalName (ai_plugin_pathfinder)' +
+        '		/localizedName [ 10' +
+        '			5061746866696e646572' +
+        '		]' +
+        '		/isOpen 1' +
+        '		/isOn 1' +
+        '		/hasDialog 0' +
+        '		/parameterCount 1' +
+        '		/parameter-1 {' +
+        '			/key 1851878757' +
+        '			/showInPalette 1' +
+        '			/type (enumerated)' +
+        '			/name [ 9' +
+        '				496e74657273656374' +
+        '			]' +
+        '			/value 1' +
+        '		}' +
+        '	}' +
+        '}',
 
-          f      = new File('~/ScriptAction.aia');
+        f = new File('~/ScriptAction.aia');
 
       f.open('w');
       f.write(actStr);
@@ -177,4 +184,3 @@ function getMinLineWeight() {
   }
 
 }
-
