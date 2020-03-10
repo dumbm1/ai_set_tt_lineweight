@@ -10,36 +10,37 @@ function getMinLineWeight() {
   var PT_TO_MM = 0.352777778;
 
   var textFrame = _getTextFrame(selection);
-  var tmplHeightElem = _makeTmplPath(textFrame, '.');
+  var tmplHeightElem = _mkTmplPath(textFrame, '.');
   var rectHeight = tmplHeightElem.height;
   tmplHeightElem.remove();
-  var tmplPath = _makeTmplPath(textFrame, 'ILJNHTMiljnhtm');
-  var rects = mkRects(tmplPath, rectHeight);
+  var tmplPath = _mkTmplPath(textFrame, 'ILJNHTMiljnhtm');
+  var rects = _mkRects(tmplPath, rectHeight);
 
   alert(rects);
 
-  function mkRects(tmplPath, rectHeight) {
-    try {
-      var W_EXT = 5;
-      var _h = tmplPath.height;
-      var _w = tmplPath.width + W_EXT * 2;
-      var rects = [];
+  /**
+   * make knife-rectangles to trim text
+   * @return {Array} rects - array of rectangls
+   * */
+  function _mkRects(tmplPath, rectHeight) {
+    var W_EXT = 5;
+    var _h = tmplPath.height;
+    var _w = tmplPath.width + W_EXT * 2;
+    var rects = [];
 
-      var amtRects = Math.ceil(_h / rectHeight);
+    var amtRects = Math.ceil(_h / rectHeight);
+    $.writeln(amtRects);
 
-      for (var i = 0, j = 0; i < amtRects; i++, j + rectHeight) {
-        var rect = rects[i];
-        rect = document.rectangle.add(0, 0, _w, rectHeight);
-        rect.position = [
-          tmplPath.position[0] - W_EXT,
-          tmplPath.position[1] + (amtRects - _h) / 2 + j
-        ];
-      }
-
-      return rects;
-    } catch (e) {
-      return e;
+    for (var i = 0, j = 0; i < amtRects; i++, j -= rectHeight) {
+      var rect = rects[i];
+      rect = activeDocument.pathItems.rectangle(0, 0, _w, rectHeight);
+      rect.position = [
+        tmplPath.position[0] - W_EXT,
+        tmplPath.position[1] + (amtRects * rectHeight - _h) / 2 + j
+      ];
     }
+
+    return rects;
   }
 
   /**
@@ -47,43 +48,43 @@ function getMinLineWeight() {
    * */
   function _intersectSelection() {
     var actStr = '' +
-      '/version 3' +
-      '/name [ 19' +
-      '	496e746572736563745f73656c656374696f6e' +
-      ']' +
-      '/isOpen 0' +
-      '/actionCount 1' +
-      '/action-1 {' +
-      '	/name [ 19' +
-      '		496e746572736563745f73656c656374696f6e' +
-      '	]' +
-      '	/keyIndex 0' +
-      '	/colorIndex 7' +
-      '	/isOpen 1' +
-      '	/eventCount 1' +
-      '	/event-1 {' +
-      '		/useRulersIn1stQuadrant 1' +
-      '		/internalName (ai_plugin_pathfinder)' +
-      '		/localizedName [ 10' +
-      '			5061746866696e646572' +
-      '		]' +
-      '		/isOpen 1' +
-      '		/isOn 1' +
-      '		/hasDialog 0' +
-      '		/parameterCount 1' +
-      '		/parameter-1 {' +
-      '			/key 1851878757' +
-      '			/showInPalette 1' +
-      '			/type (enumerated)' +
-      '			/name [ 9' +
-      '				496e74657273656374' +
-      '			]' +
-      '			/value 1' +
-      '		}' +
-      '	}' +
-      '}',
+                 '/version 3' +
+                 '/name [ 19' +
+                 '	496e746572736563745f73656c656374696f6e' +
+                 ']' +
+                 '/isOpen 0' +
+                 '/actionCount 1' +
+                 '/action-1 {' +
+                 '	/name [ 19' +
+                 '		496e746572736563745f73656c656374696f6e' +
+                 '	]' +
+                 '	/keyIndex 0' +
+                 '	/colorIndex 7' +
+                 '	/isOpen 1' +
+                 '	/eventCount 1' +
+                 '	/event-1 {' +
+                 '		/useRulersIn1stQuadrant 1' +
+                 '		/internalName (ai_plugin_pathfinder)' +
+                 '		/localizedName [ 10' +
+                 '			5061746866696e646572' +
+                 '		]' +
+                 '		/isOpen 1' +
+                 '		/isOn 1' +
+                 '		/hasDialog 0' +
+                 '		/parameterCount 1' +
+                 '		/parameter-1 {' +
+                 '			/key 1851878757' +
+                 '			/showInPalette 1' +
+                 '			/type (enumerated)' +
+                 '			/name [ 9' +
+                 '				496e74657273656374' +
+                 '			]' +
+                 '			/value 1' +
+                 '		}' +
+                 '	}' +
+                 '}',
 
-      f = new File('~/ScriptAction.aia');
+        f      = new File('~/ScriptAction.aia');
 
     f.open('w');
     f.write(actStr);
@@ -109,7 +110,7 @@ function getMinLineWeight() {
    * @param {String} textContents - string to replace textFrame content
    * @return {Object} pathTemplate - Path
    * */
-  function _makeTmplPath(textFrame, textContents) {
+  function _mkTmplPath(textFrame, textContents) {
     var textFrameDuplicate, pathTemplate, len;
 
     textFrameDuplicate = textFrame.duplicate();
