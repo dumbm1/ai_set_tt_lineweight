@@ -13,34 +13,37 @@ function getMinLineWeight() {
   var rectHeight = tmplHeightElem.height;
   tmplHeightElem.remove();
   var tmplPath = _mkTmplPath(textFrame, 'ILJNHTMiljnhtm');
-  var rects = _mkRects(tmplPath, rectHeight);
-  var resultArr = _mkTestArray(tmplPath, rects);
+  var knives = _mkKnives(tmplPath, rectHeight);
+  var slices = _mkSlices(tmplPath, knives);
 
-  alert(resultArr.length);
+  alert(slices.length);
 
   /**
    * @return {Array} resultArr - array of groups of paths
    * */
-  function _mkTestArray(tmplPath, rects) {
-    var tmplPathArr = [];
-    var resultArr = [];
+  function _mkSlices(tmplPath, knives) {
+    var slices = [];
 
-    tmplPathArr.push(tmplPath);
+    for (var i = 0; i < knives.length; i++) {
+      var knife = knives[i],
+          meat  = tmplPath.duplicate();
 
-    for (var i = 0; i < rects.length; i++) {
-      var tmplPathEl = tmplPath.duplicate();
-      tmplPathArr.push(tmplPathEl);
-    }
+      executeMenuCommand('deselectall');
 
-    for (var i = 0; i < rects.length; i++) {
-      executMenuCommand('deselectall');
-      rects[i].selected = true;
-      tmplPahtArr[i].selected = true;
+      knife.selected = true;
+      meat.selected = true;
+
       __intersectSelection();
-      resultArr.push(selection[0]);
-    }
 
-    return resultArr;
+      executeMenuCommand('ungroup');
+
+      for (var j = 0; j < selection.length; j++) {
+        var selectionElement = selection[j];
+        slices.push(selectionElement);
+      }
+
+    }
+    return slices;
 
     /**
      * make action that try to intersect selection paths
@@ -83,7 +86,7 @@ function getMinLineWeight() {
         '	}' +
         '}',
 
-        f = new File('~/ScriptAction.aia');
+          f      = new File('~/ScriptAction.aia');
 
       f.open('w');
       f.write(actStr);
@@ -97,26 +100,27 @@ function getMinLineWeight() {
 
   /**
    * make knife-rectangles to trim text
-   * @return {Array} rects - array of rectangls
+   *
+   * @return {Array} knives - array of rectangls
    * */
-  function _mkRects(tmplPath, rectHeight) {
+  function _mkKnives(tmplPath, rectHeight) {
     var W_EXT = 5;
     var _h = tmplPath.height;
     var _w = tmplPath.width + W_EXT * 2;
-    var rects = [];
+    var knives = [];
 
     var amtRects = Math.ceil(_h / rectHeight);
 
     for (var i = 0, j = 0; i < amtRects; i++, j -= rectHeight) {
-      var rect = rects[i];
-      rect = activeDocument.pathItems.rectangle(0, 0, _w, rectHeight);
+      var rect = activeDocument.pathItems.rectangle(0, 0, _w, rectHeight);
       rect.position = [
         tmplPath.position[0] - W_EXT,
         tmplPath.position[1] + (amtRects * rectHeight - _h) / 2 + j
       ];
+      knives.push(rect);
     }
 
-    return rects;
+    return knives;
   }
 
   function _getMinWidth(selection) {
