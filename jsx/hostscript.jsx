@@ -12,11 +12,22 @@ function getMinLineWeight() {
   var tmplHeightElem = _mkTmplPath(textFrame, '.');
   var rectHeight = tmplHeightElem.height;
   tmplHeightElem.remove();
-  var tmplPath = _mkTmplPath(textFrame, 'ILJNHTMiljnhtm');
+  var tmplPath = _mkTmplPath(textFrame, 'iljnhtm');
   var knives = _mkKnives(tmplPath, rectHeight);
   var slices = _mkSlices(tmplPath, knives);
+  var minLineWeight = _getMinWidth(slices, tmplHeightElem);
 
-  alert(slices.length);
+  alert(minLineWeight);
+
+  function _getMinWidth(slices, tmplHeightElem) {
+    var minW = 100000;
+    for (var i = 0; i < slices.length; i++) {
+      var sliceElem = slices[i];
+      if (sliceElem.height < tmplHeightElem.height) continue;
+      minW = Math.min(minW, sliceElem.width);
+    }
+    return minW;
+  }
 
   /**
    * @return {Array} resultArr - array of groups of paths
@@ -50,41 +61,41 @@ function getMinLineWeight() {
      * */
     function __intersectSelection() {
       var actStr = '' +
-        '/version 3' +
-        '/name [ 19' +
-        '	496e746572736563745f73656c656374696f6e' +
-        ']' +
-        '/isOpen 0' +
-        '/actionCount 1' +
-        '/action-1 {' +
-        '	/name [ 19' +
-        '		496e746572736563745f73656c656374696f6e' +
-        '	]' +
-        '	/keyIndex 0' +
-        '	/colorIndex 7' +
-        '	/isOpen 1' +
-        '	/eventCount 1' +
-        '	/event-1 {' +
-        '		/useRulersIn1stQuadrant 1' +
-        '		/internalName (ai_plugin_pathfinder)' +
-        '		/localizedName [ 10' +
-        '			5061746866696e646572' +
-        '		]' +
-        '		/isOpen 1' +
-        '		/isOn 1' +
-        '		/hasDialog 0' +
-        '		/parameterCount 1' +
-        '		/parameter-1 {' +
-        '			/key 1851878757' +
-        '			/showInPalette 1' +
-        '			/type (enumerated)' +
-        '			/name [ 9' +
-        '				496e74657273656374' +
-        '			]' +
-        '			/value 1' +
-        '		}' +
-        '	}' +
-        '}',
+                   '/version 3' +
+                   '/name [ 19' +
+                   '	496e746572736563745f73656c656374696f6e' +
+                   ']' +
+                   '/isOpen 0' +
+                   '/actionCount 1' +
+                   '/action-1 {' +
+                   '	/name [ 19' +
+                   '		496e746572736563745f73656c656374696f6e' +
+                   '	]' +
+                   '	/keyIndex 0' +
+                   '	/colorIndex 7' +
+                   '	/isOpen 1' +
+                   '	/eventCount 1' +
+                   '	/event-1 {' +
+                   '		/useRulersIn1stQuadrant 1' +
+                   '		/internalName (ai_plugin_pathfinder)' +
+                   '		/localizedName [ 10' +
+                   '			5061746866696e646572' +
+                   '		]' +
+                   '		/isOpen 1' +
+                   '		/isOn 1' +
+                   '		/hasDialog 0' +
+                   '		/parameterCount 1' +
+                   '		/parameter-1 {' +
+                   '			/key 1851878757' +
+                   '			/showInPalette 1' +
+                   '			/type (enumerated)' +
+                   '			/name [ 9' +
+                   '				496e74657273656374' +
+                   '			]' +
+                   '			/value 1' +
+                   '		}' +
+                   '	}' +
+                   '}',
 
           f      = new File('~/ScriptAction.aia');
 
