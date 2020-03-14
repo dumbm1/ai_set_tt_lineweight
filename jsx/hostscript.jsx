@@ -1,38 +1,86 @@
 /**
  * Try to search min lineweight of the seleted textFrame
- * 1. duplicate textFrame
- * 2. erase all except the last character, set the new content
  *
  * @return {Number} minimal textFrame lineweight
  * */
 function getMinLineWeight() {
   var PT_TO_MM = 0.352777778;
+  var str = prompt('Input simbols', 'LilI');
 
-  var textFrame = _getTextFrame(selection);
-  var tmplHeightElem = _mkTmplPath(textFrame, '.');
-  var rectHeight = tmplHeightElem.height;
-  tmplHeightElem.remove();
-  var tmplPath = _mkTmplPath(textFrame, 'iljnhtm');
-  var knives = _mkKnives(tmplPath, rectHeight);
-  var slices = _mkSlices(tmplPath, knives);
-  var minLineWeight = _getMinWidth(slices, tmplHeightElem);
+  if (str == null || str === '') throw new Error('Canceled by user');
 
-  alert(minLineWeight);
+  var lay = _addLay('MIN_LINEWEIGT');
 
-  function _getMinWidth(slices, tmplHeightElem) {
-    var minW = 100000;
-    for (var i = 0; i < slices.length; i++) {
-      var sliceElem = slices[i];
-      if (sliceElem.height < tmplHeightElem.height) continue;
-      minW = Math.min(minW, sliceElem.width);
+  var textFrame   = _getTextFrame(selection),
+      minHeightEl = _mkTmplPath(textFrame, '.', lay),
+      knifeHeight = minHeightEl.height;
+
+  minHeightEl.remove();
+
+  var path2slices   = _mkTmplPath(textFrame, str, lay),
+      knives        = _mkKnives(path2slices, knifeHeight),
+      slices        = _mkSlices(path2slices, knives, knifeHeight),
+      minLineWeight = _getMinWidthElem(slices);
+
+  path2slices.pathItems.add();
+  path2slices.pathItems[0].fillColor = _setCol([100, 0, 100, 0]);
+  minLineWeight.fillColor = _setCol([0, 100, 0, 0]);
+
+  return (minLineWeight.width * PT_TO_MM).toFixed(3);
+
+  /***METHODS***/
+  /***LIB***/
+
+  function _addLay(name) {
+    var lays = activeDocument.layers;
+    if (lays[0].name === name) {
+      if (lays[0].visible && !lays[0].locked) return lays[0];
     }
-    return minW;
+
+    var lay = activeDocument.layers.add();
+    lay.name = name;
+  }
+
+  function _setCol(arr/*[c,m,y,k]*/) {
+    col = new CMYKColor();
+    col.cyan = arr[0];
+    col.magenta = arr[1];
+    col.yellow = arr[2];
+    col.black = arr[3];
+    return col;
   }
 
   /**
-   * @return {Array} resultArr - array of groups of paths
+   * Compare all slices, choose one with min width
+   * Remove other
+   *
+   * @return {PathItem}
    * */
-  function _mkSlices(tmplPath, knives) {
+  function _getMinWidthElem(slices) {
+
+    var el = slices.pop();
+
+    for (var i = slices.length - 1; i >= 0; i--) {
+      var slice = slices[i];
+
+      if (slice.width <= el.width) {
+        el.remove();
+        el = slices.pop();
+      } else {
+        slice.remove();
+        slices.pop();
+      }
+    }
+
+    return el;
+  }
+
+  /**
+   * intersect templates paths with knife paths
+   *
+   * @return {Array} slices - array of paths
+   * */
+  function _mkSlices(tmplPath, knives, minHeight) {
     var slices = [];
 
     for (var i = 0; i < knives.length; i++) {
@@ -54,48 +102,60 @@ function getMinLineWeight() {
       }
 
     }
+
+    __filterByHeight(slices, minHeight);
+
     return slices;
+
+    function __filterByHeight(arr, h) {
+      for (var i = arr.length - 1; i >= 0; i--) {
+        if (arr[i].height < h) {
+          arr[i].remove();
+          arr.splice(i, 1);
+        }
+      }
+    }
 
     /**
      * make action that try to intersect selection paths
      * */
     function __intersectSelection() {
       var actStr = '' +
-                   '/version 3' +
-                   '/name [ 19' +
-                   '	496e746572736563745f73656c656374696f6e' +
-                   ']' +
-                   '/isOpen 0' +
-                   '/actionCount 1' +
-                   '/action-1 {' +
-                   '	/name [ 19' +
-                   '		496e746572736563745f73656c656374696f6e' +
-                   '	]' +
-                   '	/keyIndex 0' +
-                   '	/colorIndex 7' +
-                   '	/isOpen 1' +
-                   '	/eventCount 1' +
-                   '	/event-1 {' +
-                   '		/useRulersIn1stQuadrant 1' +
-                   '		/internalName (ai_plugin_pathfinder)' +
-                   '		/localizedName [ 10' +
-                   '			5061746866696e646572' +
-                   '		]' +
-                   '		/isOpen 1' +
-                   '		/isOn 1' +
-                   '		/hasDialog 0' +
-                   '		/parameterCount 1' +
-                   '		/parameter-1 {' +
-                   '			/key 1851878757' +
-                   '			/showInPalette 1' +
-                   '			/type (enumerated)' +
-                   '			/name [ 9' +
-                   '				496e74657273656374' +
-                   '			]' +
-                   '			/value 1' +
-                   '		}' +
-                   '	}' +
-                   '}',
+        '/version 3' +
+        '/name [ 19' +
+        '	496e746572736563745f73656c656374696f6e' +
+        ']' +
+        '/isOpen 0' +
+        '/actionCount 1' +
+        '/action-1 {' +
+        '	/name [ 19' +
+        '		496e746572736563745f73656c656374696f6e' +
+        '	]' +
+        '	/keyIndex 0' +
+        '	/colorIndex 7' +
+        '	/isOpen 1' +
+        '	/eventCount 1' +
+        '	/event-1 {' +
+        '		/useRulersIn1stQuadrant 1' +
+        '		/internalName (ai_plugin_pathfinder)' +
+        '		/localizedName [ 10' +
+        '			5061746866696e646572' +
+        '		]' +
+        '		/isOpen 1' +
+        '		/isOn 1' +
+        '		/hasDialog 0' +
+        '		/parameterCount 1' +
+        '		/parameter-1 {' +
+        '			/key 1851878757' +
+        '			/showInPalette 1' +
+        '			/type (enumerated)' +
+        '			/name [ 9' +
+        '				496e74657273656374' +
+        '			]' +
+        '			/value 1' +
+        '		}' +
+        '	}' +
+        '}',
 
           f      = new File('~/ScriptAction.aia');
 
@@ -112,7 +172,7 @@ function getMinLineWeight() {
   /**
    * make knife-rectangles to trim text
    *
-   * @return {Array} knives - array of rectangls
+   * @return {Array} knives - array of Objects PathItems Rectangles
    * */
   function _mkKnives(tmplPath, rectHeight) {
     var W_EXT = 5;
@@ -134,25 +194,19 @@ function getMinLineWeight() {
     return knives;
   }
 
-  function _getMinWidth(selection) {
-    var minWidth = 10000000;
-    for (var i = 0; i < selection.length; i++) {
-      minWidth = Math.min(selection[i].width, minWidth);
-    }
-    return minWidth;
-  }
-
   /**
    * Make CompoundPath from TextFrame
    *
    * @param {Object} textFrame - TextFrame
    * @param {String} textContents - string to replace textFrame content
-   * @return {Object} pathTemplate - Path
+   * @return {PathItem} pathTemplate - Object PathItem
    * */
-  function _mkTmplPath(textFrame, textContents) {
+  function _mkTmplPath(textFrame, textContents, lay) {
     var textFrameDuplicate, pathTemplate, len;
 
-    textFrameDuplicate = textFrame.duplicate();
+    textFrameDuplicate = textFrame.duplicate(
+      activeDocument.layers[0], ElementPlacement.PLACEATEND
+    );
     len = textFrame.characters.length;
 
     for (var i = 0; i < len - 1; i++) {
@@ -197,5 +251,4 @@ function getMinLineWeight() {
 
     throw new Error();
   }
-
 }
