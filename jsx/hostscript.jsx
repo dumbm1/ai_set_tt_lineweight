@@ -31,6 +31,10 @@ function getMinLineWeight() {
   /***METHODS***/
   /***LIB***/
 
+  function _getTextAttr(textElem){
+
+  }
+
   function _addLay(name) {
     var lays = activeDocument.layers;
     if (lays[0].name === name) {
@@ -207,11 +211,8 @@ function getMinLineWeight() {
     textFrameDuplicate = textFrame.duplicate(
       activeDocument.layers[0], ElementPlacement.PLACEATEND
     );
-    len = textFrame.characters.length;
 
-    for (var i = 0; i < len - 1; i++) {
-      textFrameDuplicate.characters[0].remove();
-    }
+    textFrameDuplicate.words.removeAll();
 
     if (textContents) textFrameDuplicate.contents = textContents;
 
